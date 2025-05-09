@@ -1,0 +1,25 @@
+path_t, u, v, latitudes, longitudes = run_algorithm()  # Adjust as needed
+    
+    # Example of generating the plot
+    plt.figure(figsize=(15, 10))
+    ax = plt.axes(projection=ccrs.PlateCarree())
+    ax.set_extent([40, 80, 0, 30], crs=ccrs.PlateCarree())
+    ax.add_feature(cfeature.COASTLINE)
+    ax.add_feature(cfeature.BORDERS, linestyle=':')
+    
+    # Plot the path (replace this with actual plotting code)
+    ax.plot(longitudes, latitudes, marker='o', color='blue', markersize=5, transform=ccrs.PlateCarree())
+    
+    # Add wind vectors (replace this with actual quiver code)
+    Lon, Lat = np.meshgrid(longitudes, latitudes)
+    ax.quiver(Lon, Lat, u, v, scale=500, color='green', alpha=0.6, transform=ccrs.PlateCarree())
+    
+    plt.title('Optimized Path with Wind Vectors')
+
+    # Save the plot to a buffer
+    buffer = io.BytesIO()
+    plt.savefig(buffer, format='png')
+    plt.close()
+    buffer.seek(0)
+
+    return HttpResponse(buffer, content_type='image/png')
